@@ -14,29 +14,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Install .NET 8
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: '8.0.x'
 
-      - name: Publish application
-        run: dotnet publish PrintCounter.Avalonia.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+      - name: Publish self-contained Linux binary
+        run: >
+          dotnet publish PrintCounter.Avalonia.csproj
+          --configuration Release
+          --runtime linux-x64
+          --self-contained true
+          /p:PublishSingleFile=true
+          /p:IncludeNativeLibrariesForSelfExtract=true
+          --output publish
 
       - name: Download appimagetool
         run: |
           wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x appimagetool-x86_64.AppImage
 
-      - name: Prepare AppDir
+      - name: Create AppDir
         run: |
           mkdir -p AppDir/usr/bin
           cp publish/PrintCounter.Avalonia AppDir/usr/bin/PrintCounter
           chmod +x AppDir/usr/bin/PrintCounter
-          printf '%s\n' '[Desktop Entry]' 'Type=Application' 'Name=PrintCounter' 'Exec=PrintCounter' 'Categories=Office;' 'Terminal=false' > AppDir/PrintCounter.desktop
-          touch AppDir/printcounter.png
+          cat > AppDir/PrintCounter.desktop <<'EOF'
+          [Desktop Entry]
+          Type=Application
+          Name=PrintCounter
+          Comment=Учёт напечатанных листов
+          Exec=PrintCounter
+          Icon=printcounter
+          Categories=Office;
+          Terminal=false
+          EOF
+          cat > AppDir/printcounter.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+            <rect x="24" y="24" width="208" height="208" rx="28" fill="#2563EB"/>
+            <rect x="58" y="52" width="140" height="112" rx="10" fill="#FFFFFF"/>
+            <rect x="78" y="78" width="100" height="10" rx="5" fill="#93C5FD"/>
+            <rect x="78" y="102" width="76" height="10" rx="5" fill="#93C5FD"/>
+            <rect x="78" y="126" width="88" height="10" rx="5" fill="#93C5FD"/>
+            <circle cx="128" cy="194" r="18" fill="#FFFFFF"/>
+          </svg>
+          EOF
 
-      - name: Create AppImage
-        run: ./appimagetool-x86_64.AppImage --appimage-extract-and-run AppDir PrintCounter-x86_64.AppImage
+      - name: Build AppImage
+        run: ./appimagetool-x86_64.AppImage AppDir PrintCounter-x86_64.AppImage
         env:
           ARCH: x86_64
 
