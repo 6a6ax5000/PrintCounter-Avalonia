@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text.Json;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace PrintCounter.Avalonia;
 
@@ -117,7 +118,7 @@ public partial class MainWindow : Window
         TotalAmountLabel.Text = $"Общая сумма: {data.PeriodAmount:N2} ₽";
     }
 
-    private void AddClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void AddClick(object? sender, RoutedEventArgs e)
     {
         var user = UserBox.Text?.Trim() ?? "";
         if (string.IsNullOrWhiteSpace(user))
@@ -139,5 +140,5 @@ public partial class MainWindow : Window
         UserBox.Focus();
     }
 
-    private void RefreshClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => RefreshAll();
+    private void RefreshClick(object? sender, RoutedEventArgs e) => RefreshAll();
 }
