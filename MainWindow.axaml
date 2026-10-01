@@ -5,43 +5,50 @@
         Width="1100" Height="720" MinWidth="900" MinHeight="600">
   <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="16">
     <Border Grid.Row="0" Padding="12" Background="#EEF3F8" CornerRadius="8">
-      <WrapPanel Spacing="12" VerticalAlignment="Center">
-        <TextBlock Text="Период с:" VerticalAlignment="Center" />
-        <DatePicker Name="FromPicker" Width="135" />
-        <TextBlock Text="по:" VerticalAlignment="Center" />
-        <DatePicker Name="ToPicker" Width="135" />
-        <TextBlock Text="Общая сумма, ₽:" VerticalAlignment="Center" Margin="12,0,0,0" />
-        <NumericUpDown Name="AmountBox" Width="150" Minimum="0" Maximum="100000000" FormatString="N2" />
-        <Button Content="Обновить отчёт" Click="RefreshClick" />
-      </WrapPanel>
+      <Grid ColumnDefinitions="Auto,135,Auto,135,Auto,150,*">
+        <TextBlock Text="Период с:" VerticalAlignment="Center" Margin="0,0,8,0" />
+        <DatePicker Grid.Column="1" Name="FromPicker" Width="135" Margin="0,0,12,0" />
+        <TextBlock Grid.Column="2" Text="по:" VerticalAlignment="Center" Margin="0,0,8,0" />
+        <DatePicker Grid.Column="3" Name="ToPicker" Width="135" Margin="0,0,20,0" />
+        <TextBlock Grid.Column="4" Text="Общая сумма, ₽:" VerticalAlignment="Center" Margin="0,0,8,0" />
+        <NumericUpDown Grid.Column="5" Name="AmountBox" Width="150" Minimum="0" Maximum="100000000" FormatString="N2" />
+        <Button Grid.Column="6" Content="Обновить отчёт" HorizontalAlignment="Right" Click="RefreshClick" />
+      </Grid>
     </Border>
 
-    <Grid Grid.Row="1" ColumnDefinitions="2*,Auto,Auto,Auto" Margin="0,14,0,14" ColumnSpacing="10">
-      <TextBox Name="UserBox" Watermark="Пользователь" />
-      <NumericUpDown Grid.Column="1" Name="SheetsBox" Width="100" Minimum="1" Maximum="1000000" Value="1" />
-      <DatePicker Grid.Column="2" Name="EntryDatePicker" Width="135" />
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,14,0,14">
+      <TextBox Name="UserBox" Watermark="Пользователь" Margin="0,0,10,0" />
+      <NumericUpDown Grid.Column="1" Name="SheetsBox" Width="100" Minimum="1" Maximum="1000000" Value="1" Margin="0,0,10,0" />
+      <DatePicker Grid.Column="2" Name="EntryDatePicker" Width="135" Margin="0,0,10,0" />
       <Button Grid.Column="3" Content="Добавить запись" Click="AddClick" />
     </Grid>
 
-    <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="14">
-      <GroupBox Header="Записи" Grid.Column="0">
-        <DataGrid Name="EntriesGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True">
-          <DataGrid.Columns>
-            <DataGridTextColumn Header="Дата" Binding="{Binding DateText}" Width="1*" />
-            <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
-            <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
-          </DataGrid.Columns>
-        </DataGrid>
-      </GroupBox>
-      <GroupBox Header="Сводный отчёт" Grid.Column="1">
-        <DataGrid Name="ReportGrid" AutoGenerateColumns="False" IsReadOnly="True">
-          <DataGrid.Columns>
-            <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
-            <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
-            <DataGridTextColumn Header="Сумма, ₽" Binding="{Binding AmountText}" Width="1*" />
-          </DataGrid.Columns>
-        </DataGrid>
-      </GroupBox>
+    <Grid Grid.Row="2" ColumnDefinitions="*,*">
+      <Border Grid.Column="0" BorderBrush="#D5DCE5" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,7,0">
+        <Grid RowDefinitions="Auto,*">
+          <TextBlock Text="Записи" FontWeight="Bold" Margin="4,2,4,8" />
+          <DataGrid Grid.Row="1" Name="EntriesGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Дата" Binding="{Binding DateText}" Width="1*" />
+              <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
+              <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="1" BorderBrush="#D5DCE5" BorderThickness="1" CornerRadius="6" Padding="8" Margin="7,0,0,0">
+        <Grid RowDefinitions="Auto,*">
+          <TextBlock Text="Сводный отчёт" FontWeight="Bold" Margin="4,2,4,8" />
+          <DataGrid Grid.Row="1" Name="ReportGrid" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
+              <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
+              <DataGridTextColumn Header="Сумма, ₽" Binding="{Binding AmountText}" Width="1*" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+      </Border>
     </Grid>
 
     <Border Grid.Row="3" Padding="12,10" Margin="0,14,0,0" Background="#EEF3F8" CornerRadius="8">
