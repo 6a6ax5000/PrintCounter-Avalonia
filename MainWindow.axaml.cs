@@ -57,7 +57,7 @@ public partial class MainWindow : Window
         FromPicker.SelectedDate = data.PeriodFrom;
         ToPicker.SelectedDate = data.PeriodTo;
         EntryDatePicker.SelectedDate = DateTime.Today;
-        AmountBox.Value = (double)data.PeriodAmount;
+        AmountBox.Value = data.PeriodAmount;
     }
 
     private void SaveData()
