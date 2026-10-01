@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PrintCounter.Avalonia.MainWindow"
+        Title="Учёт напечатанных листов"
+        Width="1100" Height="720" MinWidth="900" MinHeight="600">
+  <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="16">
+    <Border Grid.Row="0" Padding="12" Background="#EEF3F8" CornerRadius="8">
+      <WrapPanel Spacing="12" VerticalAlignment="Center">
+        <TextBlock Text="Период с:" VerticalAlignment="Center" />
+        <DatePicker Name="FromPicker" Width="135" />
+        <TextBlock Text="по:" VerticalAlignment="Center" />
+        <DatePicker Name="ToPicker" Width="135" />
+        <TextBlock Text="Общая сумма, ₽:" VerticalAlignment="Center" Margin="12,0,0,0" />
+        <NumericUpDown Name="AmountBox" Width="150" Minimum="0" Maximum="100000000" FormatString="N2" />
+        <Button Content="Обновить отчёт" Click="RefreshClick" />
+      </WrapPanel>
+    </Border>
+
+    <Grid Grid.Row="1" ColumnDefinitions="2*,Auto,Auto,Auto" Margin="0,14,0,14" ColumnSpacing="10">
+      <TextBox Name="UserBox" Watermark="Пользователь" />
+      <NumericUpDown Grid.Column="1" Name="SheetsBox" Width="100" Minimum="1" Maximum="1000000" Value="1" />
+      <DatePicker Grid.Column="2" Name="EntryDatePicker" Width="135" />
+      <Button Grid.Column="3" Content="Добавить запись" Click="AddClick" />
+    </Grid>
+
+    <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="14">
+      <GroupBox Header="Записи" Grid.Column="0">
+        <DataGrid Name="EntriesGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Дата" Binding="{Binding DateText}" Width="1*" />
+            <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
+            <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
+          </DataGrid.Columns>
+        </DataGrid>
+      </GroupBox>
+      <GroupBox Header="Сводный отчёт" Grid.Column="1">
+        <DataGrid Name="ReportGrid" AutoGenerateColumns="False" IsReadOnly="True">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Пользователь" Binding="{Binding User}" Width="2*" />
+            <DataGridTextColumn Header="Листы" Binding="{Binding Sheets}" Width="1*" />
+            <DataGridTextColumn Header="Сумма, ₽" Binding="{Binding AmountText}" Width="1*" />
+          </DataGrid.Columns>
+        </DataGrid>
+      </GroupBox>
+    </Grid>
+
+    <Border Grid.Row="3" Padding="12,10" Margin="0,14,0,0" Background="#EEF3F8" CornerRadius="8">
+      <StackPanel Spacing="4">
+        <TextBlock Name="PriceLabel" FontWeight="Bold" />
+        <TextBlock Name="TotalSheetsLabel" />
+        <TextBlock Name="TotalAmountLabel" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</Window>
